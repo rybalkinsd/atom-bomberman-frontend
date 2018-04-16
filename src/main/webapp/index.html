@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+    <title>Bomberman</title>
+    <meta name="description" content="Transmission">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
+    <script src="js/external/preloadjs-NEXT.combined.js"></script>
+    <script src="js/external/easeljs-NEXT.combined.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <script type="text/javascript" src="js/Utils.js"></script>
+    <script type="text/javascript" src="js/Player.js"></script>
+    <script type="text/javascript" src="js/Bonus.js"></script>
+    <script type="text/javascript" src="js/Tile.js"></script>
+    <script type="text/javascript" src="js/Fire.js"></script>
+    <script type="text/javascript" src="js/Bomb.js"></script>
+    <script type="text/javascript" src="js/Menu.js"></script>
+    <script type="text/javascript" src="js/InputEngine.js"></script>
+    <script type="text/javascript" src="js/GameEngine.js"></script>
+    <script type="text/javascript" src="js/Message.js"></script>
+    <script type="text/javascript" src="js/ServerProxy.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+</head>
+<body onload="gGameEngine.load()">
+    <div class="container">
+        <div class="page-header">
+        </div>
+        <div id="game">
+            <canvas id="canvas" width="864" height="544" style="background-color: gray;"></canvas>
+        </div>
+        <h3>You have only 10 seconds to transmit the bomb, be fast!</h3>
+        <ul>
+            <li><strong>arrow keys</strong> - move</li>
+            <li><strong>spacebar</strong> - jump</li>
+            <li><strong>q</strong> - plant bomb</li>
+        </ul>
+        <hr>
+
+        <div class="footer">
+            <div class="alert alert-success">
+                <img src="img/github.png" width="25">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
