@@ -18,7 +18,7 @@ ServerProxy.prototype.getSessionIdFromMatchMaker = function () {
     var settings = {
         "method": "POST",
         "crossDomain": true,
-        "url": gClusterSettings.makeMatchMakerUrl(),
+        "url": gClusterSettings.matchMakerUrl(),
         "data": name
     };
 
@@ -54,7 +54,7 @@ ServerProxy.prototype.subscribeEvents = function() {
 };
 
 ServerProxy.prototype.connectToGameServer = function(gameId) {
-    this.socket = new WebSocket(gClusterSettings.makeGameServerUrl() + "?gameId=" + gameId + "&name=NKOHA");
+    this.socket = new WebSocket(gClusterSettings.gameServerUrl() + "?gameId=" + gameId + "&name=NKOHA");
     gGameEngine.menu.hide();
 
     gGameEngine.playing = true;

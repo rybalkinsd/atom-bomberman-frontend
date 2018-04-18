@@ -14,11 +14,11 @@ var ClusterSetting = function () {
     };
 };
 
-ClusterSetting.prototype.makeGameServerUrl = function() {
+ClusterSetting.prototype.gameServerUrl = function() {
     return makeUrl(this.gameServer)
 };
 
-ClusterSetting.prototype.makeMatchMakerUrl = function() {
+ClusterSetting.prototype.matchMakerUrl = function() {
     return makeUrl(this.matchMaker)
 };
 

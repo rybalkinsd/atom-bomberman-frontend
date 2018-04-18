@@ -17,6 +17,7 @@ var GameEngine = function () {
     this.bombs =  [];
 
     this.menu = new Menu();
+    this.serverProxy = new ServerProxy();
 };
 
 GameEngine.prototype.load = function () {
@@ -35,7 +36,7 @@ GameEngine.prototype.load = function () {
         self.bonusesImgs.speed = queue.getResult("bonus_speed");
         self.bonusesImgs.bombs = queue.getResult("bonus_bomb");
         self.bonusesImgs.explosion = queue.getResult("bonus_explosion");
-        self.startGameLoop();
+        self.startGame();
     });
     queue.loadManifest([
         {id: "pawn", src: "img/george.png"},
@@ -51,16 +52,10 @@ GameEngine.prototype.load = function () {
     ]);
 };
 
-GameEngine.prototype.startGameLoop = function () {
+GameEngine.prototype.startGame = function () {
     if (!gInputEngine.bindings.length) {
         gInputEngine.setup();
     }
-
-    this.bombs = [];
-    this.tiles = [];
-    this.bonuses = [];
-
-    this.serverProxy = new ServerProxy();
 
     if (!createjs.Ticker.hasEventListener('tick')) {
         createjs.Ticker.addEventListener('tick', gGameEngine.update);
@@ -112,9 +107,17 @@ GameEngine.prototype.gameOver = function (msg) {
 };
 
 GameEngine.prototype.restart = function () {
+    this.cleanCanvas();
+    gGameEngine.startGame();
+};
+
+GameEngine.prototype.cleanCanvas = function () {
+    this.bombs = [];
+    this.tiles = [];
+    this.bonuses = [];
+    this.fires = [];
+
     gGameEngine.stage.removeAllChildren();
-    gGameEngine.startGameLoop();
-    this.serverProxy = new ServerProxy();
 };
 
 GameEngine.prototype.moveToFront = function (child) {

@@ -1,22 +1,12 @@
+/**
+ * There are a lot of magic numbers in this file
+ * most of them are related to element position on canvas
+ * Will be very grateful for merge request with fix of this numbers
+ *
+ */
 var Menu = function () {
     this.visible = true;
     this.elements = [];
-};
-
-// todo where is the usage
-Menu.prototype.showLoader = function () {
-    var bgGraphics = new createjs.Graphics()
-        .beginFill("#000000")
-        .drawRect(0, 0, gGameEngine.size.w, gGameEngine.size.h);
-    var bg = new createjs.Shape(bgGraphics);
-    gGameEngine.stage.addChild(bg);
-
-    var loadingText = new createjs.Text("Loading...", "20px Helvetica", "#FFFFFF");
-    loadingText.x = gGameEngine.size.w / 2 - loadingText.getMeasuredWidth() / 2;
-    loadingText.y = gGameEngine.size.h / 2 - loadingText.getMeasuredHeight() / 2 - 150;
-    gGameEngine.stage.addChild(loadingText);
-
-    gGameEngine.stage.update();
 };
 
 Menu.prototype.show = function () {
@@ -30,7 +20,6 @@ Menu.prototype.hide = function () {
     for (var i = 0; i < this.elements.length; i++) {
         gGameEngine.stage.removeChild(this.elements[i]);
     }
-
     this.elements = [];
 };
 
