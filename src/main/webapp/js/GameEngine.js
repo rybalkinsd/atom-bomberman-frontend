@@ -15,17 +15,18 @@ var GameEngine = function () {
     this.bonusesImgs = {};
     this.fires = [];
     this.bombs =  [];
+
+    this.menu = new Menu();
 };
 
 GameEngine.prototype.load = function () {
     this.stage = new createjs.Stage("canvas");
     this.stage.enableMouseOver();
 
-    // Load assets
     var queue = new createjs.LoadQueue();
     var self = this;
     queue.addEventListener("complete", function () {
-        self.playerBoyImg = queue.getResult("playerBoy");
+        self.pawn = queue.getResult("pawn");
         self.tilesImgs.grass = queue.getResult("tile_grass");
         self.tilesImgs.wall = queue.getResult("tile_wall");
         self.tilesImgs.wood = queue.getResult("tile_wood");
@@ -37,7 +38,7 @@ GameEngine.prototype.load = function () {
         self.startGameLoop();
     });
     queue.loadManifest([
-        {id: "playerBoy", src: "img/george.png"},
+        {id: "pawn", src: "img/george.png"},
         {id: "tile_grass", src: "img/tileSand1.png"},
         {id: "tile_grass2", src: "img/tileSand2.png"},
         {id: "tile_wall", src: "img/tile_wall.png"},
@@ -48,8 +49,6 @@ GameEngine.prototype.load = function () {
         {id: "bonus_bomb", src: "img/bonus_bomb.png"},
         {id: "bonus_explosion", src: "img/bonus_explosion.png"},
     ]);
-
-    this.menu = new Menu();
 };
 
 GameEngine.prototype.startGameLoop = function () {
@@ -78,15 +77,9 @@ GameEngine.prototype.startGameLoop = function () {
 GameEngine.prototype.drawSandTiles = function () {
     for (var i = 0; i < this.tilesY; i++) {
         for (var j = 0; j < this.tilesX; j++) {
-            var img = new Image();
-            if (Math.random() > 0.5) {
-                img.src = "img/tileSand1.png";
-            } else {
-                img.src = "img/tileSand2.png";
-            }
-            var bitmap = new createjs.Bitmap(img);
-            bitmap.x = j * 32;
-            bitmap.y = i * 32;
+            var bitmap = new createjs.Bitmap(Math.random() > 0.5 ? 'img/tileSand1.png' : 'img/tileSand2.png');
+            bitmap.x = j * this.tileSize;
+            bitmap.y = i * this.tileSize;
 
             this.stage.addChild(bitmap);
         }
@@ -111,7 +104,7 @@ GameEngine.prototype.update = function () {
 
 GameEngine.prototype.gameOver = function (msg) {
     gInputEngine.subscribers = [];
-    if (msg.data === "\"YOU LOSE\"") {
+    if (msg.data === '"YOU LOSE"') {
         this.menu.showWithText("GAME OVER :(", "#ff4444");
     } else {
         this.menu.showWithText("YOU WIN! :)", "#00FF00");

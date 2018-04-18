@@ -26,6 +26,7 @@ var Bomb = function (id, position, strength) {
 
     this.bmp.gotoAndPlay('idle');
     gGameEngine.stage.addChild(this.bmp);
+    gGameEngine.bombs.push(this);
 };
 
 Bomb.prototype.remove = function() {

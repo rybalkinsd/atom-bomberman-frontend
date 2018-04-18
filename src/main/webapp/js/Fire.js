@@ -20,17 +20,17 @@ var Fire = function (id, position) {
 
     this.bmp = new createjs.Sprite(spriteSheet);
     this.bmp.gotoAndPlay('idle');
+    // magic constants to make better fire bang
+    this.bmp.x = position.x + 2;
+    this.bmp.y = position.y - 5;
 
     var self = this;
     this.bmp.addEventListener('animationend', function() {
         self.remove();
     });
 
-    // magic constants to make better fire bang
-    this.bmp.x = position.x + 2;
-    this.bmp.y = position.y - 5;
-
     gGameEngine.stage.addChild(this.bmp);
+    gGameEngine.fires.push(this);
 };
 
 Fire.prototype.remove = function () {

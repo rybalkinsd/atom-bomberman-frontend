@@ -1,13 +1,9 @@
 var ServerProxy = function () {
-    this.gameServerUrl = "localhost:8090";
-    this.matchMakerUrl = "localhost:8080";
-
     this.handler = {
         'REPLICA': gMessages.handleReplica,
         'POSSESS': gMessages.handlePossess,
         'GAME_OVER': gMessages.handleGameOver
     };
-
 };
 
 ServerProxy.prototype.getSessionIdFromMatchMaker = function () {
@@ -22,15 +18,15 @@ ServerProxy.prototype.getSessionIdFromMatchMaker = function () {
     var settings = {
         "method": "POST",
         "crossDomain": true,
-        "url": "http://" + this.matchMakerUrl + "/matchmaker/join",
+        "url": gClusterSettings.makeMatchMakerUrl(),
         "data": name
     };
 
     var self = this;
-    $.ajax(settings).done(function(data){
-        this.gameId=data;
-        self.connectToGameServer(this.gameId);
-    }).fail(function(){
+    $.ajax(settings).done(function(data) {
+        self.gameId = data;
+        self.connectToGameServer(self.gameId);
+    }).fail(function() {
         alert("Matchmaker request failed");
     });
 };
@@ -58,7 +54,7 @@ ServerProxy.prototype.subscribeEvents = function() {
 };
 
 ServerProxy.prototype.connectToGameServer = function(gameId) {
-    this.socket = new WebSocket("ws://" + this.gameServerUrl + "/events/connect?gameId=" + gameId + "&name=NKOHA");
+    this.socket = new WebSocket(gClusterSettings.makeGameServerUrl() + "?gameId=" + gameId + "&name=NKOHA");
     gGameEngine.menu.hide();
 
     gGameEngine.playing = true;

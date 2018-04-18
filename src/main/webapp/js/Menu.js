@@ -1,8 +1,9 @@
 var Menu = function () {
     this.visible = true;
-    this.views = [];
+    this.elements = [];
 };
 
+// todo where is the usage
 Menu.prototype.showLoader = function () {
     var bgGraphics = new createjs.Graphics()
         .beginFill("#000000")
@@ -26,11 +27,11 @@ Menu.prototype.show = function () {
 Menu.prototype.hide = function () {
     this.visible = false;
 
-    for (var i = 0; i < this.views.length; i++) {
-        gGameEngine.stage.removeChild(this.views[i]);
+    for (var i = 0; i < this.elements.length; i++) {
+        gGameEngine.stage.removeChild(this.elements[i]);
     }
 
-    this.views = [];
+    this.elements = [];
 };
 
 Menu.prototype.showWithText = function (text, color) {
@@ -41,27 +42,29 @@ Menu.prototype.showWithText = function (text, color) {
 Menu.prototype.draw = function (text, color) {
     this.drawBackground();
     this.drawStartButton();
-    this.drawText(text, color);
+    if (text !== null) {
+        this.drawText(text, color);
+    }
 };
 
 Menu.prototype.update = function () {
-    if (!this.views) {
+    if (!this.elements) {
         return;
     }
 
-    for (var i = 0; i < this.views.length; i++) {
-        gGameEngine.moveToFront(this.views[i]);
+    for (var i = 0; i < this.elements.length; i++) {
+        gGameEngine.moveToFront(this.elements[i]);
     }
 };
 
 Menu.prototype.drawBackground = function () {
-    var bgGraphics = new createjs.Graphics()
+    var canvasRect = new createjs.Graphics()
         .beginFill("rgba(0, 0, 0, 0.5)")
         .drawRect(0, 0, gGameEngine.size.w, gGameEngine.size.h);
 
-    var bg = new createjs.Shape(bgGraphics);
-    gGameEngine.stage.addChild(bg);
-    this.views.push(bg);
+    var background = new createjs.Shape(canvasRect);
+    gGameEngine.stage.addChild(background);
+    this.elements.push(background);
 };
 
 Menu.prototype.drawText = function (text, color) {
@@ -77,7 +80,7 @@ Menu.prototype.drawText = function (text, color) {
     }
     gameText.y =  startButtonY.y - 90;
     gGameEngine.stage.addChild(gameText);
-    this.views.push(gameText);
+    this.elements.push(gameText);
 };
 
 Menu.prototype.drawStartButton = function () {
@@ -90,7 +93,7 @@ Menu.prototype.drawStartButton = function () {
         .drawRect(startButtonX, startButtonY, startButtonSize, startButtonSize);
     var singleBg = new createjs.Shape(singleBgGraphics);
     gGameEngine.stage.addChild(singleBg);
-    this.views.push(singleBg);
+    this.elements.push(singleBg);
     this.setHandCursor(singleBg);
 
     singleBg.addEventListener('click', function () {
@@ -104,7 +107,7 @@ Menu.prototype.drawStartButton = function () {
     playButton.x = startButtonX + (startButtonSize - singleTitleWidth) / 2;
     playButton.y = modeTitlesY;
     gGameEngine.stage.addChild(playButton);
-    this.views.push(playButton);
+    this.elements.push(playButton);
 
     var iconsY = startButtonY + 13;
     var singleIcon = new createjs.Bitmap("img/betty.png");
@@ -112,7 +115,7 @@ Menu.prototype.drawStartButton = function () {
     singleIcon.x = startButtonX + (startButtonSize - 48) / 2;
     singleIcon.y = iconsY;
     gGameEngine.stage.addChild(singleIcon);
-    this.views.push(singleIcon);
+    this.elements.push(singleIcon);
 };
 
 Menu.prototype.setHandCursor = function (btn) {

@@ -21,13 +21,10 @@ InputEngine.prototype.setup = function() {
     this.bind(39, 'right');
     this.bind(40, 'down');
 
-
     this.bind(81, 'bomb');
     this.bind(32, 'jump');
 
-    this.bind(13, 'restart');
     this.bind(27, 'escape');
-    this.bind(77, 'mute');
 
     // move multiple presses with fps frequency
     this.keyboardController({
@@ -82,7 +79,7 @@ InputEngine.prototype.keyboardController = function(keys, repeat) {
 
     // When key is pressed and we don't already think it's pressed, call the
     // key action callback and set a timer to generate another one after a delay
-    document.onkeydown= function(event) {
+    document.onkeydown = function(event) {
         var key = (event || window.event).keyCode;
         if (!(key in keys))
             return true;
@@ -111,10 +108,10 @@ InputEngine.prototype.keyboardController = function(keys, repeat) {
     // When window is unfocused we may not get key events. To prevent this
     // causing a key to 'get stuck down', cancel all held keys
     window.onblur = function() {
-        for (key in timers)
-            if (timers[key] !== null)
-                clearInterval(timers[key]);
-        timers= {};
+        for (var timer in timers)
+            if (timers[timer] !== null)
+                clearInterval(timers[timer]);
+        timers = {};
     };
 };
 

@@ -79,8 +79,7 @@ Message.prototype.handleBomb = function(obj) {
         bomb.bmp.x = position.x;
         bomb.bmp.y = position.y;
     } else {
-        bomb = new Bomb(obj.id, position);
-        gGameEngine.bombs.push(bomb);
+        new Bomb(obj.id, position);
     }
 
 };
@@ -95,8 +94,7 @@ Message.prototype.handleBonus = function(obj) {
         bonus.bmp.x = position.x;
         bonus.bmp.y = position.y;
     } else {
-        bonus = new Bonus(obj.id, position, obj.bonusType);
-        gGameEngine.bonuses.push(bonus);
+        new Bonus(obj.id, position, obj.bonusType);
     }
 };
 
@@ -108,8 +106,7 @@ Message.prototype.handleTile = function (obj) {
     if (tile) {
         tile.material = obj.type;
     } else {
-        tile = new Tile(obj.id, position, obj.type);
-        gGameEngine.tiles.push(tile);
+        new Tile(obj.id, position, obj.type);
     }
 };
 
@@ -120,8 +117,7 @@ Message.prototype.handleFire = function (obj) {
 
     var position = Utils.getEntityPosition(obj.position);
     if (!fire) {
-        fire = new Fire(obj.id, position);
-        gGameEngine.fires.push(fire);
+        new Fire(obj.id, position);
     }
 };
 
