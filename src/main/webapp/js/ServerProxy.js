@@ -6,32 +6,7 @@ var ServerProxy = function () {
     };
 };
 
-ServerProxy.prototype.getSessionIdFromMatchMaker = function () {
-    var name = "name=" + Math.floor((1 + Math.random()) * 0x10000)
-        .toString(16)
-        .substring(1);
-
-    if(!name) {
-        alert("Please input login");
-    }
-
-    var settings = {
-        "method": "POST",
-        "crossDomain": true,
-        "url": gClusterSettings.matchMakerUrl(),
-        "data": name
-    };
-
-    var self = this;
-    $.ajax(settings).done(function(data) {
-        self.gameId = data;
-        self.connectToGameServer(self.gameId);
-    }).fail(function() {
-        alert("Matchmaker request failed");
-    });
-};
-
-ServerProxy.prototype.subscribeEvents = function() {
+ServerProxy.prototype.setupMessaging = function() {
     var self = this;
     gInputEngine.subscribe('up', function () {
         self.socket.send(gMessages.move('up'))
@@ -55,35 +30,25 @@ ServerProxy.prototype.subscribeEvents = function() {
 
 ServerProxy.prototype.connectToGameServer = function(gameId) {
     this.socket = new WebSocket(gClusterSettings.gameServerUrl() + "?gameId=" + gameId + "&name=NKOHA");
-    gGameEngine.menu.hide();
-
-    gGameEngine.playing = true;
-    gGameEngine.restart();
-
-    this.subscribeEvents();
-
-    this.socket.onopen = function () {
-    };
-
-    this.socket.onclose = function (event) {
-        if (event.wasClean) {
-            console.log('closed');
-        } else {
-            console.log('alert close');
-        }
-        console.log('Code: ' + event.code + ' cause: ' + event.reason);
-    };
-
     var self = this;
     this.socket.onmessage = function (event) {
         var msg = JSON.parse(event.data);
-        if (self.handler[msg.topic] === undefined)
+        if (self.handler[msg.topic] === undefined) {
             return;
-
+        }
         self.handler[msg.topic](msg);
+    };
+
+    this.socket.onopen = function () { };
+
+    this.socket.onclose = function (event) {
+        gGameEngine.unsubscribeAll();
+        console.log('Code: ' + event.code + ' cause: ' + event.reason);
     };
 
     this.socket.onerror = function (error) {
         console.log("Error " + error.message);
     };
+
+    this.setupMessaging();
 };

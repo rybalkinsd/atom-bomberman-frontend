@@ -1,27 +1,24 @@
-var GameEngine = function () {
-    this.tileSize = 32;
-    this.tilesX = 27;
-    this.tilesY = 17;
-    this.size = {
-        w: this.tileSize * this.tilesX,
-        h: this.tileSize * this.tilesY
-    };
-
+var GameEngine = function (canvasConfig) {
+    this.canvasConfig = canvasConfig;
     this.fps = 60;
     this.players = [];
     this.tiles = [];
-    this.tilesImgs = {};
     this.bonuses = [];
-    this.bonusesImgs = {};
     this.fires = [];
     this.bombs =  [];
 
-    this.menu = new Menu();
+    this.tilesImgs = {};
+    this.bonusesImgs = {};
+
     this.serverProxy = new ServerProxy();
 };
 
 GameEngine.prototype.load = function () {
     this.stage = new createjs.Stage("canvas");
+    this.stage.canvas.width = gCanvas.getWidthInPixel();
+    this.stage.canvas.height = gCanvas.getHeightInPixel();
+
+    this.menu = new Menu(this.stage);
     this.stage.enableMouseOver();
 
     var queue = new createjs.LoadQueue();
@@ -36,12 +33,11 @@ GameEngine.prototype.load = function () {
         self.bonusesImgs.speed = queue.getResult("bonus_speed");
         self.bonusesImgs.bombs = queue.getResult("bonus_bomb");
         self.bonusesImgs.explosion = queue.getResult("bonus_explosion");
-        self.startGame();
+        self.initCanvas();
     });
     queue.loadManifest([
         {id: "pawn", src: "img/george.png"},
-        {id: "tile_grass", src: "img/tileSand1.png"},
-        {id: "tile_grass2", src: "img/tileSand2.png"},
+        {id: "tile_grass", src: "img/tile_grass.png"},
         {id: "tile_wall", src: "img/tile_wall.png"},
         {id: "tile_wood", src: "img/crateWood.png"},
         {id: "bomb", src: "img/bomb.png"},
@@ -52,30 +48,30 @@ GameEngine.prototype.load = function () {
     ]);
 };
 
-GameEngine.prototype.startGame = function () {
-    if (!gInputEngine.bindings.length) {
-        gInputEngine.setup();
-    }
+GameEngine.prototype.initCanvas = function () {
+    gInputEngine.setupBindings();
 
     if (!createjs.Ticker.hasEventListener('tick')) {
         createjs.Ticker.addEventListener('tick', gGameEngine.update);
         createjs.Ticker.setFPS(this.fps);
     }
 
-    if (!this.playing) {
-        this.menu.show();
-    }
+    this.menu.show();
+};
 
+GameEngine.prototype.startGame = function () {
+    this.menu.hide();
     this.drawSandTiles();
+    var gameId = gMatchMaker.getSessionId();
+    this.serverProxy.connectToGameServer(gameId);
 };
 
 GameEngine.prototype.drawSandTiles = function () {
-    for (var i = 0; i < this.tilesY; i++) {
-        for (var j = 0; j < this.tilesX; j++) {
-            var bitmap = new createjs.Bitmap(Math.random() > 0.5 ? 'img/tileSand1.png' : 'img/tileSand2.png');
-            bitmap.x = j * this.tileSize;
-            bitmap.y = i * this.tileSize;
-
+    for (var i = 0; i < this.canvasConfig.tiles.w; i++) {
+        for (var j = 0; j < this.canvasConfig.tiles.h; j++) {
+            var bitmap = new createjs.Bitmap(gGameEngine.tilesImgs.grass);
+            bitmap.x = i * this.canvasConfig.tileSize;
+            bitmap.y = j * this.canvasConfig.tileSize;
             this.stage.addChild(bitmap);
         }
     }
@@ -93,23 +89,20 @@ GameEngine.prototype.update = function () {
         bomb.update();
     }
 
-    gGameEngine.menu.update();
     gGameEngine.stage.update();
 };
 
 GameEngine.prototype.gameOver = function (msg) {
+    this.clearPlayers();
+    this.cleanCanvas();
     gInputEngine.subscribers = [];
     if (msg.data === '"YOU LOSE"') {
-        this.menu.showWithText("GAME OVER :(", "#ff4444");
+        this.menu.showGameOver("GAME OVER :(", "#ff4444");
     } else {
-        this.menu.showWithText("YOU WIN! :)", "#00FF00");
+        this.menu.showGameOver("YOU WIN! :)", "#00FF00");
     }
 };
 
-GameEngine.prototype.restart = function () {
-    this.cleanCanvas();
-    gGameEngine.startGame();
-};
 
 GameEngine.prototype.cleanCanvas = function () {
     this.bombs = [];
@@ -120,10 +113,6 @@ GameEngine.prototype.cleanCanvas = function () {
     gGameEngine.stage.removeAllChildren();
 };
 
-GameEngine.prototype.moveToFront = function (child) {
-    var children = this.stage.getNumChildren();
-    this.stage.setChildIndex(child, children - 1);
-};
 
 GameEngine.prototype.clearPlayers = function () {
     [this.players, this.fires, this.bombs].forEach(function (it) {
@@ -175,4 +164,4 @@ GameEngine.prototype.gc = function (gameObjects) {
     });
 };
 
-gGameEngine = new GameEngine();
+gGameEngine = new GameEngine(gCanvas);

@@ -46,7 +46,6 @@ Message.prototype.handleReplica = function (msg) {
 
 Message.prototype.handleGameOver = function (msg) {
     gGameEngine.gameOver(msg);
-    gGameEngine.clearPlayers();
 };
 
 Message.prototype.handlePossess = function (msg) {

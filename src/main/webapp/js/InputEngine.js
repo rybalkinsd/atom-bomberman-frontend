@@ -15,7 +15,7 @@ var InputEngine = function () {
     this.subscribers = [];
 };
 
-InputEngine.prototype.setup = function() {
+InputEngine.prototype.setupBindings = function() {
     this.bind(37, 'left');
     this.bind(38, 'up');
     this.bind(39, 'right');
@@ -70,6 +70,10 @@ InputEngine.prototype.onKeyDown = function(event) {
 InputEngine.prototype.subscribe = function (action, callback) {
     this.subscribers[action] = this.subscribers[action] || [];
     this.subscribers[action].push(callback)
+};
+
+InputEngine.prototype.unsubscribeAll = function () {
+    this.subscribers = [];
 };
 
 // Keyboard input with customisable repeat (set to 0 for no key repeat)

@@ -4,8 +4,9 @@
  * Will be very grateful for merge request with fix of this numbers
  *
  */
-var Menu = function () {
+var Menu = function (stage) {
     this.visible = true;
+    this.stage = stage;
     this.elements = [];
 };
 
@@ -18,12 +19,12 @@ Menu.prototype.hide = function () {
     this.visible = false;
 
     for (var i = 0; i < this.elements.length; i++) {
-        gGameEngine.stage.removeChild(this.elements[i]);
+        this.stage.removeChild(this.elements[i]);
     }
     this.elements = [];
 };
 
-Menu.prototype.showWithText = function (text, color) {
+Menu.prototype.showGameOver = function (text, color) {
     this.visible = true;
     this.draw(text, color);
 };
@@ -31,50 +32,40 @@ Menu.prototype.showWithText = function (text, color) {
 Menu.prototype.draw = function (text, color) {
     this.drawBackground();
     this.drawStartButton();
-    if (text !== null) {
-        this.drawText(text, color);
-    }
-};
-
-Menu.prototype.update = function () {
-    if (!this.elements) {
-        return;
-    }
-
-    for (var i = 0; i < this.elements.length; i++) {
-        gGameEngine.moveToFront(this.elements[i]);
-    }
+    // if (text !== null) {
+    //     this.drawText(text, color);
+    // }
 };
 
 Menu.prototype.drawBackground = function () {
     var canvasRect = new createjs.Graphics()
         .beginFill("rgba(0, 0, 0, 0.5)")
-        .drawRect(0, 0, gGameEngine.size.w, gGameEngine.size.h);
+        .drawRect(0, 0, gCanvas.getWidthInPixel(), gCanvas.getHeightInPixel());
 
     var background = new createjs.Shape(canvasRect);
-    gGameEngine.stage.addChild(background);
+    this.stage.addChild(background);
     this.elements.push(background);
 };
 
-Menu.prototype.drawText = function (text, color) {
-    var startButtonX = gGameEngine.size.w / 2 - 55;
-    var startButtonY = gGameEngine.size.h / 2 - 80;
-
-    var gameText = new createjs.Text(text, "20px Helvetica", color);
-    if (text === "GAME OVER :(") {
-        gameText.x = startButtonX - 40;
-    }
-    else {
-        gameText.x = startButtonX - 30;
-    }
-    gameText.y =  startButtonY.y - 90;
-    gGameEngine.stage.addChild(gameText);
-    this.elements.push(gameText);
-};
+// Menu.prototype.drawText = function (text, color) {
+//     var startButtonX = gGameEngine.size.w / 2 - 55;
+//     var startButtonY = gGameEngine.size.h / 2 - 80;
+//
+//     var gameText = new createjs.Text(text, "20px Helvetica", color);
+//     if (text === "GAME OVER :(") {
+//         gameText.x = startButtonX - 40;
+//     }
+//     else {
+//         gameText.x = startButtonX - 30;
+//     }
+//     gameText.y =  startButtonY.y - 90;
+//     gGameEngine.stage.addChild(gameText);
+//     this.elements.push(gameText);
+// };
 
 Menu.prototype.drawStartButton = function () {
-    var startButtonX = gGameEngine.size.w / 2 - 55;
-    var startButtonY = gGameEngine.size.h / 2 - 80;
+    var startButtonX = gCanvas.getWidthInPixel() / 2 - 55;
+    var startButtonY = gCanvas.getHeightInPixel() / 2 - 80;
     var startButtonSize = 110;
 
     var singleBgGraphics = new createjs.Graphics()
@@ -85,8 +76,8 @@ Menu.prototype.drawStartButton = function () {
     this.elements.push(singleBg);
     this.setHandCursor(singleBg);
 
-    singleBg.addEventListener('click', function () {
-        gGameEngine.serverProxy.getSessionIdFromMatchMaker();
+    singleBg.addEventListener('click', function() {
+        gGameEngine.startGame()
     });
 
     var playButton = new createjs.Text("Play", "32px Helvetica", "#ff4444");
