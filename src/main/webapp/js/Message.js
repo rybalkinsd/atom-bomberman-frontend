@@ -45,7 +45,7 @@ Message.prototype.handleReplica = function (msg) {
 };
 
 Message.prototype.handleGameOver = function (msg) {
-    gGameEngine.gameOver(msg);
+    gGameEngine.gameOver(msg.data);
 };
 
 Message.prototype.handlePossess = function (msg) {

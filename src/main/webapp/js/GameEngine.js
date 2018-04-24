@@ -36,7 +36,7 @@ GameEngine.prototype.load = function () {
         self.initCanvas();
     });
     queue.loadManifest([
-        {id: "pawn", src: "img/george.png"},
+        {id: "pawn", src: "img/betty.png"},
         {id: "tile_grass", src: "img/tile_grass.png"},
         {id: "tile_wall", src: "img/tile_wall.png"},
         {id: "tile_wood", src: "img/crateWood.png"},
@@ -52,7 +52,10 @@ GameEngine.prototype.initCanvas = function () {
     gInputEngine.setupBindings();
 
     if (!createjs.Ticker.hasEventListener('tick')) {
-        createjs.Ticker.addEventListener('tick', gGameEngine.update);
+        var self = this;
+        createjs.Ticker.addEventListener('tick', function () {
+            self.update();
+        });
         createjs.Ticker.setFPS(this.fps);
     }
 
@@ -69,7 +72,7 @@ GameEngine.prototype.startGame = function () {
 GameEngine.prototype.drawSandTiles = function () {
     for (var i = 0; i < this.canvasConfig.tiles.w; i++) {
         for (var j = 0; j < this.canvasConfig.tiles.h; j++) {
-            var bitmap = new createjs.Bitmap(gGameEngine.tilesImgs.grass);
+            var bitmap = new createjs.Bitmap(this.tilesImgs.grass);
             bitmap.x = i * this.canvasConfig.tileSize;
             bitmap.y = j * this.canvasConfig.tileSize;
             this.stage.addChild(bitmap);
@@ -78,29 +81,25 @@ GameEngine.prototype.drawSandTiles = function () {
 };
 
 GameEngine.prototype.update = function () {
-    for (var i = 0; i < gGameEngine.players.length; i++) {
-        var player = gGameEngine.players[i];
+    for (var i = 0; i < this.players.length; i++) {
+        var player = this.players[i];
 
         player.update(player.id);
     }
 
-    for (var i = 0; i < gGameEngine.bombs.length; i++) {
-        var bomb = gGameEngine.bombs[i];
+    for (var i = 0; i < this.bombs.length; i++) {
+        var bomb = this.bombs[i];
         bomb.update();
     }
 
-    gGameEngine.stage.update();
+    this.stage.update();
 };
 
-GameEngine.prototype.gameOver = function (msg) {
+GameEngine.prototype.gameOver = function (gameOverText) {
+    gInputEngine.subscribers = [];
     this.clearPlayers();
     this.cleanCanvas();
-    gInputEngine.subscribers = [];
-    if (msg.data === '"YOU LOSE"') {
-        this.menu.showGameOver("GAME OVER :(", "#ff4444");
-    } else {
-        this.menu.showGameOver("YOU WIN! :)", "#00FF00");
-    }
+    this.menu.showGameOver(gameOverText);
 };
 
 
@@ -110,7 +109,7 @@ GameEngine.prototype.cleanCanvas = function () {
     this.bonuses = [];
     this.fires = [];
 
-    gGameEngine.stage.removeAllChildren();
+    this.stage.removeAllChildren();
 };
 
 
