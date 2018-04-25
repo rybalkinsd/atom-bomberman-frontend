@@ -1,4 +1,4 @@
-var CanvasConfig = function () {
+var CanvasSettings = function () {
     this.tileSize = 32;
     this.tiles = {
         w: 27,
@@ -10,20 +10,20 @@ var CanvasConfig = function () {
     };
 };
 
-CanvasConfig.prototype.getWidthInPixel = function () {
+CanvasSettings.prototype.getWidthInPixel = function () {
     return this.size.w;
 };
 
-CanvasConfig.prototype.getWidthInTiles = function () {
+CanvasSettings.prototype.getWidthInTiles = function () {
     return this.tiles.w;
 };
 
-CanvasConfig.prototype.getHeightInPixel = function () {
+CanvasSettings.prototype.getHeightInPixel = function () {
     return this.size.h;
 };
 
-CanvasConfig.prototype.getHeightInTiles = function () {
+CanvasSettings.prototype.getHeightInTiles = function () {
     return this.tiles.h;
 };
 
-gCanvas = new CanvasConfig();
+gCanvas = new CanvasSettings();

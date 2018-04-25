@@ -1,14 +1,10 @@
 var GameEngine = function () {
-    this.tilesImgs = {};
-    this.bonusesImgs = {};
 };
 
 GameEngine.prototype.load = function () {
     this.stage = new createjs.Stage("canvas");
     this.stage.canvas.width = gCanvas.getWidthInPixel();
     this.stage.canvas.height = gCanvas.getHeightInPixel();
-
-    this.menu = new Menu(this.stage);
     this.stage.enableMouseOver();
 
     var queue = new createjs.LoadQueue();
@@ -39,6 +35,7 @@ GameEngine.prototype.load = function () {
 };
 
 GameEngine.prototype.initCanvas = function () {
+    this.menu = new Menu(this.stage);
     this.menu.show();
     this.stage.update();
 };
