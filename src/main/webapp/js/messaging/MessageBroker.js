@@ -92,7 +92,7 @@ MessageBroker.prototype.handleFire = function (obj) {
 MessageBroker.prototype.mirrorPosition = function (origin) {
     return {
         x: origin.x,
-        y: -origin.y + gCanvas.getHeightInPixel()
+        y: -origin.y + gCanvas.getHeightInPixel() - gCanvas.tileSize
     }
 };
 
