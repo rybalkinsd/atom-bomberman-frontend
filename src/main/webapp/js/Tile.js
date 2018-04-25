@@ -1,7 +1,7 @@
 var Tile = function (id, position, material) {
     this.id = id;
 
-    var img =  (material === 'Wall')
+    var img = (material === 'Wall')
         ? gGameEngine.tilesImgs.wall
         : gGameEngine.tilesImgs.wood;
 
