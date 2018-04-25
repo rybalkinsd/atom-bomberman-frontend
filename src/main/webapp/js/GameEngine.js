@@ -130,7 +130,7 @@ GameEngine.prototype.gc = function (gameObjects) {
         var obj = gameObjects[i];
 
         if (obj.type === 'Pawn' || obj.type === 'Bomb') {
-            gMessages.handler[obj.type](obj);
+            gMessageBroker.handler[obj.type](obj);
             survivors.add(obj.id);
             continue;
         }
@@ -147,7 +147,7 @@ GameEngine.prototype.gc = function (gameObjects) {
         });
 
         if (!wasDeleted && obj.type !== 'Pawn') {
-            gMessages.handler[obj.type](obj);
+            gMessageBroker.handler[obj.type](obj);
         }
     }
 

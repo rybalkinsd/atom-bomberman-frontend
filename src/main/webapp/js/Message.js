@@ -1,4 +1,4 @@
-var Message = function () {
+var MessageBroker = function () {
     this.handler = {
         'Pawn': this.handlePawn,
         'Bomb': this.handleBomb,
@@ -9,50 +9,20 @@ var Message = function () {
     }
 };
 
-Message.prototype.move = function (direction) {
-    var template = {
-        topic: "MOVE",
-        data: {
-            direction: direction.toUpperCase()
-        }
-    };
-
-    return JSON.stringify(template);
-};
-
-Message.prototype.plantBomb = function () {
-    var template = {
-        topic: "PLANT_BOMB",
-        data: {}
-    };
-
-    return JSON.stringify(template);
-};
-
-// Experimental
-Message.prototype.jump = function () {
-    var template = {
-        topic: "JUMP",
-        data: {}
-    };
-
-    return JSON.stringify(template);
-};
-
-Message.prototype.handleReplica = function (msg) {
+MessageBroker.prototype.handleReplica = function (msg) {
     var gameObjects = JSON.parse(msg.data);
     gGameEngine.gc(gameObjects);
 };
 
-Message.prototype.handleGameOver = function (msg) {
+MessageBroker.prototype.handleGameOver = function (msg) {
     gGameEngine.gameOver(msg.data);
 };
 
-Message.prototype.handlePossess = function (msg) {
+MessageBroker.prototype.handlePossess = function (msg) {
     gInputEngine.possessed = parseInt(msg.data);
 };
 
-Message.prototype.handlePawn = function(obj) {
+MessageBroker.prototype.handlePawn = function(obj) {
     var player = gGameEngine.players.find(function (el) {
         return el.id === obj.id;
     });
@@ -68,7 +38,7 @@ Message.prototype.handlePawn = function(obj) {
     }
 };
 
-Message.prototype.handleBomb = function(obj) {
+MessageBroker.prototype.handleBomb = function(obj) {
     var bomb = gGameEngine.bombs.find(function (el) {
         return el.id === obj.id;
     });
@@ -83,7 +53,7 @@ Message.prototype.handleBomb = function(obj) {
 
 };
 
-Message.prototype.handleBonus = function(obj) {
+MessageBroker.prototype.handleBonus = function(obj) {
     var bonus = gGameEngine.bonuses.find(function (el) {
         return el.id === obj.id;
     });
@@ -97,7 +67,7 @@ Message.prototype.handleBonus = function(obj) {
     }
 };
 
-Message.prototype.handleTile = function (obj) {
+MessageBroker.prototype.handleTile = function (obj) {
     var tile = gGameEngine.tiles.find(function (el) {
         return el.id === obj.id;
     });
@@ -109,7 +79,7 @@ Message.prototype.handleTile = function (obj) {
     }
 };
 
-Message.prototype.handleFire = function (obj) {
+MessageBroker.prototype.handleFire = function (obj) {
     var fire = gGameEngine.fires.find(function (el) {
         return el.id === obj.id;
     });
@@ -120,4 +90,34 @@ Message.prototype.handleFire = function (obj) {
     }
 };
 
-gMessages = new Message();
+MessageBroker.prototype.move = function (direction) {
+    var template = {
+        topic: "MOVE",
+        data: {
+            direction: direction.toUpperCase()
+        }
+    };
+
+    return JSON.stringify(template);
+};
+
+MessageBroker.prototype.plantBomb = function () {
+    var template = {
+        topic: "PLANT_BOMB",
+        data: {}
+    };
+
+    return JSON.stringify(template);
+};
+
+// Experimental
+MessageBroker.prototype.jump = function () {
+    var template = {
+        topic: "JUMP",
+        data: {}
+    };
+
+    return JSON.stringify(template);
+};
+
+gMessageBroker = new MessageBroker();

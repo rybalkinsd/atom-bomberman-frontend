@@ -1,30 +1,30 @@
 var ServerProxy = function () {
     this.handler = {
-        'REPLICA': gMessages.handleReplica,
-        'POSSESS': gMessages.handlePossess,
-        'GAME_OVER': gMessages.handleGameOver
+        'REPLICA': gMessageBroker.handleReplica,
+        'POSSESS': gMessageBroker.handlePossess,
+        'GAME_OVER': gMessageBroker.handleGameOver
     };
 };
 
 ServerProxy.prototype.setupMessaging = function() {
     var self = this;
     gInputEngine.subscribe('up', function () {
-        self.socket.send(gMessages.move('up'))
+        self.socket.send(gMessageBroker.move('up'))
     });
     gInputEngine.subscribe('down', function () {
-        self.socket.send(gMessages.move('down'))
+        self.socket.send(gMessageBroker.move('down'))
     });
     gInputEngine.subscribe('left', function () {
-        self.socket.send(gMessages.move('left'))
+        self.socket.send(gMessageBroker.move('left'))
     });
     gInputEngine.subscribe('right', function () {
-        self.socket.send(gMessages.move('right'))
+        self.socket.send(gMessageBroker.move('right'))
     });
     gInputEngine.subscribe('bomb', function () {
-        self.socket.send(gMessages.plantBomb());
+        self.socket.send(gMessageBroker.plantBomb());
     });
     gInputEngine.subscribe('jump', function () {
-        self.socket.send(gMessages.jump());
+        self.socket.send(gMessageBroker.jump());
     });
 };
 
