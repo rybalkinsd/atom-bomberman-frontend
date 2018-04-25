@@ -54,8 +54,10 @@ GameEngine.prototype.startGame = function () {
 };
 
 GameEngine.prototype.finishGame = function (gameOverText) {
-    this.game.finish();
-    this.game = null;
+    if (this.game !== null) {
+        this.game.finish();
+        this.game = null;
+    }
     this.menu.showGameOver(gameOverText);
     this.stage.update();
 };
