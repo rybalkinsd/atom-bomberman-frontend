@@ -14,7 +14,7 @@ Game.prototype.start = function () {
     gInputEngine.setupBindings();
     var gameId = gMatchMaker.getSessionId();
     this.serverProxy.connectToGameServer(gameId);
-    this.drawSandTiles();
+    this.drawBackground();
 
     var self = this;
     createjs.Ticker.addEventListener('tick', function () {
@@ -49,10 +49,10 @@ Game.prototype.finish = function () {
 };
 
 
-Game.prototype.drawSandTiles = function () {
+Game.prototype.drawBackground = function () {
     for (var i = 0; i < gCanvas.tiles.w; i++) {
         for (var j = 0; j < gCanvas.tiles.h; j++) {
-            var bitmap = new createjs.Bitmap(gGameEngine.tilesImgs.grass);
+            var bitmap = new createjs.Bitmap(gGameEngine.asset.tile.grass);
             bitmap.x = i * gCanvas.tileSize;
             bitmap.y = j * gCanvas.tileSize;
             this.stage.addChild(bitmap);

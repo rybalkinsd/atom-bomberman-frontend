@@ -1,4 +1,11 @@
 var GameEngine = function () {
+    this.asset = {
+        pawn: null,
+        bomb: null,
+        fire: null,
+        tile: {},
+        bonus: {}
+    };
 };
 
 GameEngine.prototype.load = function () {
@@ -10,15 +17,15 @@ GameEngine.prototype.load = function () {
     var queue = new createjs.LoadQueue();
     var self = this;
     queue.addEventListener("complete", function () {
-        self.pawn = queue.getResult("pawn");
-        self.tilesImgs.grass = queue.getResult("tile_grass");
-        self.tilesImgs.wall = queue.getResult("tile_wall");
-        self.tilesImgs.wood = queue.getResult("tile_wood");
-        self.bombImg = queue.getResult("bomb");
-        self.fireImg = queue.getResult("fire");
-        self.bonusesImgs.speed = queue.getResult("bonus_speed");
-        self.bonusesImgs.bombs = queue.getResult("bonus_bomb");
-        self.bonusesImgs.explosion = queue.getResult("bonus_explosion");
+        self.asset.pawn = queue.getResult("pawn");
+        self.asset.tile.grass = queue.getResult("tile_grass");
+        self.asset.tile.wall = queue.getResult("tile_wall");
+        self.asset.tile.wood = queue.getResult("tile_wood");
+        self.asset.bomb = queue.getResult("bomb");
+        self.asset.fire = queue.getResult("fire");
+        self.asset.bonus.speed = queue.getResult("bonus_speed");
+        self.asset.bonus.bombs = queue.getResult("bonus_bomb");
+        self.asset.bonus.explosion = queue.getResult("bonus_explosion");
         self.initCanvas();
     });
     queue.loadManifest([

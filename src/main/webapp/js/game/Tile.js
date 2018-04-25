@@ -2,11 +2,10 @@ var Tile = function (id, position, material) {
     this.id = id;
 
     var img = (material === 'Wall')
-        ? gGameEngine.tilesImgs.wall
-        : gGameEngine.tilesImgs.wood;
+        ? gGameEngine.asset.tile.wall
+        : gGameEngine.asset.tile.wood;
 
     this.bmp = new createjs.Bitmap(img);
-
     this.bmp.x = position.x;
     this.bmp.y = position.y;
 

@@ -6,7 +6,7 @@ var Fire = function (id, position) {
     };
 
     var spriteSheet = new createjs.SpriteSheet({
-        images: [gGameEngine.fireImg],
+        images: [gGameEngine.asset.fire],
         frames: {
             width: size.w,
             height: size.h,

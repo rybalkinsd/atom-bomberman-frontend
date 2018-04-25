@@ -8,7 +8,7 @@ var Bomb = function (id, position, strength) {
     };
 
     var spriteSheet = new createjs.SpriteSheet({
-        images: [gGameEngine.bombImg],
+        images: [gGameEngine.asset.bomb],
         frames: {
             width: size.w,
             height: size.h,

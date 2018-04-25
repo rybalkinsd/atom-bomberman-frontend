@@ -3,11 +3,11 @@ var Bonus = function (id, position, type) {
 
     var img;
     if (type === 'SPEED') {
-        img = gGameEngine.bonusesImgs.speed;
+        img = gGameEngine.asset.bonus.speed;
     } else if (type === 'BOMBS') {
-        img = gGameEngine.bonusesImgs.bombs;
+        img = gGameEngine.asset.bonus.bombs;
     } else if (type === 'RANGE') {
-        img = gGameEngine.bonusesImgs.explosion;
+        img = gGameEngine.asset.bonus.explosion;
     }
 
     this.bmp = new createjs.Bitmap(img);

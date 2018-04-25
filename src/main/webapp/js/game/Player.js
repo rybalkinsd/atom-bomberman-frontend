@@ -8,7 +8,7 @@ var Player = function (id, position) {
     };
 
     var spriteSheet = new createjs.SpriteSheet({
-        images: [gGameEngine.pawn],
+        images: [gGameEngine.asset.pawn],
         frames: {
             width: size.w,
             height: size.h,
