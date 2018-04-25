@@ -83,7 +83,7 @@ Menu.prototype.drawPlayButtonText = function (x, y, buttonSize) {
 };
 
 Menu.prototype.drawPawnIcon = function (x, y, buttonSize) {
-    var singleIcon = new createjs.Bitmap(gGameEngine.pawn);
+    var singleIcon = new createjs.Bitmap(gGameEngine.asset.pawn);
     var pawnIconSize = 48;
     singleIcon.sourceRect = new createjs.Rectangle(0, 0, pawnIconSize, pawnIconSize);
     // counting central position inside background
