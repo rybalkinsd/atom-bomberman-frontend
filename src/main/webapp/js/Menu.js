@@ -38,9 +38,10 @@ Menu.prototype.drawBackground = function () {
 };
 
 Menu.prototype.showGameOverText = function (text) {
-    var gameOverText = new createjs.Text(text, "20px Helvetica", "#ff4444");
-    gameOverText.x = 100;
-    gameOverText.y = 100;
+    var gameOverText = new createjs.Text(text, "40px Helvetica", "#ff4444");
+    gameOverText.x = (gCanvas.getWidthInPixel() - gameOverText.getMeasuredWidth()) / 2;
+    var shiftFromUpside = 60;
+    gameOverText.y = shiftFromUpside;
     this.stage.addChild(gameOverText);
     this.elements.push(gameOverText);
 };

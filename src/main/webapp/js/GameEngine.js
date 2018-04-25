@@ -102,7 +102,6 @@ GameEngine.prototype.gameOver = function (gameOverText) {
     this.menu.showGameOver(gameOverText);
 };
 
-
 GameEngine.prototype.cleanCanvas = function () {
     this.bombs = [];
     this.tiles = [];
