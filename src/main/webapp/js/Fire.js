@@ -30,7 +30,7 @@ var Fire = function (id, position) {
     });
 
     gGameEngine.stage.addChild(this.bmp);
-    gGameEngine.fires.push(this);
+    gGameEngine.game.fires.push(this);
 };
 
 Fire.prototype.remove = function () {

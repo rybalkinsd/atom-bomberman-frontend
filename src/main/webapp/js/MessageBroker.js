@@ -11,11 +11,11 @@ var MessageBroker = function () {
 
 MessageBroker.prototype.handleReplica = function (msg) {
     var gameObjects = JSON.parse(msg.data);
-    gGameEngine.gc(gameObjects);
+    gGameEngine.game.gc(gameObjects);
 };
 
 MessageBroker.prototype.handleGameOver = function (msg) {
-    gGameEngine.gameOver(msg.data);
+    gGameEngine.finishGame(msg.data);
 };
 
 MessageBroker.prototype.handlePossess = function (msg) {
@@ -23,7 +23,7 @@ MessageBroker.prototype.handlePossess = function (msg) {
 };
 
 MessageBroker.prototype.handlePawn = function(obj) {
-    var player = gGameEngine.players.find(function (el) {
+    var player = gGameEngine.game.players.find(function (el) {
         return el.id === obj.id;
     });
     var position = Utils.getEntityPosition(obj.position);
@@ -34,12 +34,12 @@ MessageBroker.prototype.handlePawn = function(obj) {
         player.direction = direction;
     } else {
         player = new Player(obj.id, position);
-        gGameEngine.players.push(player);
+        gGameEngine.game.players.push(player);
     }
 };
 
 MessageBroker.prototype.handleBomb = function(obj) {
-    var bomb = gGameEngine.bombs.find(function (el) {
+    var bomb = gGameEngine.game.bombs.find(function (el) {
         return el.id === obj.id;
     });
     var position = Utils.getEntityPosition(obj.position);
@@ -50,11 +50,10 @@ MessageBroker.prototype.handleBomb = function(obj) {
     } else {
         new Bomb(obj.id, position);
     }
-
 };
 
 MessageBroker.prototype.handleBonus = function(obj) {
-    var bonus = gGameEngine.bonuses.find(function (el) {
+    var bonus = gGameEngine.game.bonuses.find(function (el) {
         return el.id === obj.id;
     });
     var position = Utils.getEntityPosition(obj.position);
@@ -68,7 +67,7 @@ MessageBroker.prototype.handleBonus = function(obj) {
 };
 
 MessageBroker.prototype.handleTile = function (obj) {
-    var tile = gGameEngine.tiles.find(function (el) {
+    var tile = gGameEngine.game.tiles.find(function (el) {
         return el.id === obj.id;
     });
     var position = Utils.getEntityPosition(obj.position);
@@ -80,7 +79,7 @@ MessageBroker.prototype.handleTile = function (obj) {
 };
 
 MessageBroker.prototype.handleFire = function (obj) {
-    var fire = gGameEngine.fires.find(function (el) {
+    var fire = gGameEngine.game.fires.find(function (el) {
         return el.id === obj.id;
     });
 

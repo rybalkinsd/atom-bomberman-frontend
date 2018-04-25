@@ -42,7 +42,6 @@ ServerProxy.prototype.connectToGameServer = function(gameId) {
     this.socket.onopen = function () { };
 
     this.socket.onclose = function (event) {
-        gGameEngine.unsubscribeAll();
         console.log('Code: ' + event.code + ' cause: ' + event.reason);
     };
 

@@ -17,7 +17,7 @@ var Bonus = function (id, position, type) {
     this.bmp.y = position.y;
 
     gGameEngine.stage.addChild(this.bmp);
-    gGameEngine.bonuses.push(this);
+    gGameEngine.game.bonuses.push(this);
 };
 
 Bonus.prototype.remove = function() {
