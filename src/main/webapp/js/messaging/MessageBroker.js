@@ -26,7 +26,7 @@ MessageBroker.prototype.handlePawn = function(obj) {
     var player = gGameEngine.game.players.find(function (el) {
         return el.id === obj.id;
     });
-    var position = Utils.getEntityPosition(obj.position);
+    var position = gMessageBroker.mirrorPosition(obj.position);
     var direction = obj.direction;
     if (player) {
         player.bmp.x = position.x;
@@ -42,7 +42,7 @@ MessageBroker.prototype.handleBomb = function(obj) {
     var bomb = gGameEngine.game.bombs.find(function (el) {
         return el.id === obj.id;
     });
-    var position = Utils.getEntityPosition(obj.position);
+    var position = gMessageBroker.mirrorPosition(obj.position);
 
     if (bomb) {
         bomb.bmp.x = position.x;
@@ -56,7 +56,7 @@ MessageBroker.prototype.handleBonus = function(obj) {
     var bonus = gGameEngine.game.bonuses.find(function (el) {
         return el.id === obj.id;
     });
-    var position = Utils.getEntityPosition(obj.position);
+    var position = gMessageBroker.mirrorPosition(obj.position);
 
     if (bonus) {
         bonus.bmp.x = position.x;
@@ -70,7 +70,7 @@ MessageBroker.prototype.handleTile = function (obj) {
     var tile = gGameEngine.game.tiles.find(function (el) {
         return el.id === obj.id;
     });
-    var position = Utils.getEntityPosition(obj.position);
+    var position = gMessageBroker.mirrorPosition(obj.position);
     if (tile) {
         tile.material = obj.type;
     } else {
@@ -83,9 +83,16 @@ MessageBroker.prototype.handleFire = function (obj) {
         return el.id === obj.id;
     });
 
-    var position = Utils.getEntityPosition(obj.position);
+    var position = gMessageBroker.mirrorPosition(obj.position);
     if (!fire) {
         new Fire(obj.id, position);
+    }
+};
+
+MessageBroker.prototype.mirrorPosition = function (origin) {
+    return {
+        x: origin.x,
+        y: -origin.y + gCanvas.getHeightInPixel()
     }
 };
 
