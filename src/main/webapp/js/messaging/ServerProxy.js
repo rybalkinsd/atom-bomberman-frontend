@@ -29,7 +29,7 @@ ServerProxy.prototype.setupMessaging = function() {
 };
 
 ServerProxy.prototype.connectToGameServer = function(gameId) {
-    this.socket = new WebSocket(gClusterSettings.gameServerUrl() + "?gameId=" + gameId + "&name=NKOHA");
+    this.socket = new SockJS(gClusterSettings.gameServerUrl() + "?gameId=" + gameId + "&name=NKOHA");
     var self = this;
     this.socket.onmessage = function (event) {
         var msg = JSON.parse(event.data);
