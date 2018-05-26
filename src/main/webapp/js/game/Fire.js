@@ -1,3 +1,5 @@
+// Вид объекта в реплике
+// {"id":5,"type":"Fire","position":{"y":20,"x":10}}
 var Fire = function (id, position) {
     this.id = id;
     var size = {

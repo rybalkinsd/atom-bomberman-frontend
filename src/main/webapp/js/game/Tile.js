@@ -1,3 +1,6 @@
+// Вид объекта в реплике
+// {"id":6,"type":"Wall","position":{"y":20,"x":10}}
+// {"id":7,"type":"Wood","position":{"y":20,"x":10}}
 var Tile = function (id, position, material) {
     this.id = id;
 

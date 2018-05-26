@@ -10,6 +10,7 @@ var Game = function (stage) {
     this.serverProxy = new ServerProxy();
 };
 
+// when game starts we connect socket to URL in ClusterSettings
 Game.prototype.start = function () {
     gInputEngine.setupBindings();
     var gameId = gMatchMaker.getSessionId();
@@ -60,19 +61,28 @@ Game.prototype.drawBackground = function () {
     }
 };
 
+// Каждую реплику происходит обновление игрового состояния, проверяем каждый объект - должны ли мы его удалить
+// Назвал бы его не GarbageCollector а ObjectsManager потому что он не только удаляет объекты, а так же создает и
+// изменяет (Pawn и  Bomb)
 Game.prototype.gc = function (gameObjects) {
     var survivors = new Set();
 
+    // Стоит отметить что все объекты изначально разделяются по ID
     for (var i = 0; i < gameObjects.length; i++) {
         var wasDeleted = false;
         var obj = gameObjects[i];
 
+        // Суть в том, что Пешка и Бомба живут ровно столько, сколько мы отправляем их в реплике (В отличие от других
+        // объектов, таких как ящики)
         if (obj.type === 'Pawn' || obj.type === 'Bomb') {
             gMessageBroker.handler[obj.type](obj);
             survivors.add(obj.id);
             continue;
         }
 
+        // Ящики же и бонусы живут между двумя репликами, в которых они присутствуют
+        // Если они были присланны в реплике в первый раз, то они появляются
+        // Если же второй раз, то удаляются
         [this.tiles, this.bonuses].forEach(function (it) {
             var i = it.length;
             while (i--) {
@@ -84,11 +94,14 @@ Game.prototype.gc = function (gameObjects) {
             }
         });
 
+        // здесь мы добавляем обычгые объекты, кстати условие на проверку Pawn вроде лишнее, так как в начале мы
+        // проверяем на равенство
         if (!wasDeleted && obj.type !== 'Pawn') {
             gMessageBroker.handler[obj.type](obj);
         }
     }
 
+    // Вот как раз мы тут удаляем Pawn и Bomb
     [this.players, this.bombs].forEach(function (it) {
         var i = it.length;
         while (i--) {
