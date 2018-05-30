@@ -28,6 +28,8 @@ ServerProxy.prototype.setupMessaging = function() {
     });
 };
 
+// Присоединяемся к серверу по сокету
+// у WebSocketSession в Java имеется функция getURI() с помощью которого этот "Хвост" получается
 ServerProxy.prototype.connectToGameServer = function(gameId) {
     this.socket = new WebSocket(gClusterSettings.gameServerUrl() + "?gameId=" + gameId + "&name=NKOHA");
     var self = this;

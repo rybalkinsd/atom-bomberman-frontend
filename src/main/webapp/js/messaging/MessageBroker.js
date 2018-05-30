@@ -9,6 +9,19 @@ var MessageBroker = function () {
     }
 };
 
+// Здесь обрабатывается реплика, хотелось бы отметить как вообще объекты должны присылаться (Их вид):
+// Объекты, отправляемые с сервера имеют вид (что из них что думаю ясно):
+// {"id":0,"type":"Pawn","position":{"y":20,"x":10},"alive":true,"direction":""}
+// {"id":1,"type":"Bomb","position":{"y":20,"x":10}}
+// {"id":2,"type":"Bonus","position":{"y":20,"x":10},"bonusType":"BOMBS"}
+// {"id":3,"type":"Bonus","position":{"y":20,"x":10},"bonusType":"SPEED"}
+// {"id":4,"type":"Bonus","position":{"y":20,"x":10},"bonusType":"RANGE"}
+// {"id":5,"type":"Fire","position":{"y":20,"x":10}}
+// {"id":6,"type":"Wall","position":{"y":20,"x":10}}
+// {"id":7,"type":"Wood","position":{"y":20,"x":10}}
+//
+// msg при выводе в консоль должно выглядеть примерно так
+// "[{\"id\":383,\"type\":\"Pawn\",\"position\":{\"x\":800,\"y\":32},\"alive\":true,\"direction\":\"\"}]"
 MessageBroker.prototype.handleReplica = function (msg) {
     var gameObjects = JSON.parse(msg.data);
     gGameEngine.game.gc(gameObjects);
@@ -18,10 +31,14 @@ MessageBroker.prototype.handleGameOver = function (msg) {
     gGameEngine.finishGame(msg.data);
 };
 
+// Реализация оставлена на разработчика сервера
 MessageBroker.prototype.handlePossess = function (msg) {
     gInputEngine.possessed = parseInt(msg.data);
 };
 
+// Далее происходит обработка присланных объектов (эти функции вызываются из функции gc)
+// Суть примерно одна - если нашли объект, то обновили его характеристики (Если это обычные объекты, то они не обновляются)
+// Если нет, то обратились к конструктору за новым
 MessageBroker.prototype.handlePawn = function(obj) {
     var player = gGameEngine.game.players.find(function (el) {
         return el.id === obj.id;
