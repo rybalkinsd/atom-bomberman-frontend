@@ -28,6 +28,7 @@ MessageBroker.prototype.handleReplica = function (msg) {
 };
 
 MessageBroker.prototype.handleGameOver = function (msg) {
+    gGameEngine.game.serverProxy.socket.close();
     gGameEngine.finishGame(msg.data);
 };
 
